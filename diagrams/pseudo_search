@@ -1,0 +1,19 @@
+PROCEDURE search_item(search_text):
+
+    IF search_text is empty THEN
+        GET all items from ITEMS table
+        DISPLAY all items in item list
+    END IF
+
+    GET items from ITEMS table where name CONTAINS search_text
+
+    IF no items found THEN
+        DISPLAY message "No items found"
+    ELSE
+        DISPLAY matching items in item list
+    END IF
+
+END PROCEDURE
+
+
+

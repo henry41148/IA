@@ -1,0 +1,50 @@
+PROCEDURE confirm_order():
+
+    IF current_order is empty THEN
+        DISPLAY error message "No items in order"
+    END IF
+
+    CREATE new record in ORDERS table where
+        date = today's date
+        total_price = total_cost
+    GET order_id of newly created order
+
+    FOR EACH item in current_order
+
+        INSERT into ORDERED_ITEMS
+            order_id = order_id
+            item_id = item.item_id
+
+        GET ordered_item_id of newly inserted row
+
+        FOR EACH subcategory in item.selected_subcategories
+            INSERT into ORDERED_ITEMS_SUBCATEGORIES
+                ordered_item_id = ordered_item_id
+                subcategory_id = subcategory.subcategory_id
+        END FOR
+
+        GET ingredients from ITEMS_INGREDIENTS where item_id = item.item_id
+
+        FOR EACH ingredient
+            UPDATE INGREDIENTS
+            SET current_stock = current_stock - ingredient.quantity_used
+            where ingredient_id = ingredient.ingredient_id
+        END FOR
+
+        FOR EACH subcategory in item.selected_subcategories
+            GET ingredient from SUBCATEGORIES_INGREDIENTS
+            where subcategory_id = subcategory.subcategory_id
+            IF ingredient exists THEN
+                UPDATE INGREDIENTS
+                SET current_stock = current_stock - ingredient.quantity_used
+                where ingredient_id = ingredient.ingredient_id
+            END IF
+
+        END FOR
+
+    END FOR
+
+    CALL reset_order()
+
+END PROCEDURE
+

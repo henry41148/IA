@@ -1,0 +1,23 @@
+PROCEDURE check_reorder_levels():
+
+    GET all ingredients from INGREDIENTS table
+
+    SET low_stock_items = empty list
+
+    FOR EACH ingredient
+        IF ingredient.current_stock < ingredient.reorder_level THEN
+            ADD ingredient to low_stock_items
+        END IF
+    END FOR
+
+    IF low_stock_items is empty THEN
+        HIDE warning banner
+    ELSE
+        DISPLAY warning banner at top of screen
+        DISPLAY names of low_stock_items in warning banner
+    END IF
+
+END PROCEDURE
+
+
+

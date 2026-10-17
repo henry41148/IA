@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CS IA – Development Plan</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #1e1e2e;
+      padding: 40px 24px;
+    }
+
+    header {
+      max-width: 900px;
+      margin: 0 auto 36px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    header p {
+      margin-top: 6px;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .stack-badges {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .phase {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .phase-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .phase-title { font-size: 1.05rem; font-weight: 600; }
+    .phase-subtitle { font-size: 0.82rem; color: #888; margin-top: 2px; }
+
+    .phase-body { padding: 18px 20px; }
+
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    .task-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .task-list li::before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 2px solid #d1d5db;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Completed phase styling */
+    .done {
+      opacity: 0.75;
+    }
+
+    .done .phase-header {
+      background: #f0fdf4;
+    }
+
+    .done .task-list li::before {
+      content: '✓';
+      background: #16a34a;
+      border-color: #16a34a;
+      color: white;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .done-badge {
+      margin-left: auto;
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+
+    .criteria-tag {
+      margin-left: auto;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Phase colour themes */
+    .p1 .phase-number { background: #dbeafe; color: #1d4ed8; }
+    .p1 .criteria-tag { background: #dbeafe; color: #1d4ed8; }
+
+    .p2 .phase-number { background: #dcfce7; color: #15803d; }
+    .p2 .criteria-tag { background: #dcfce7; color: #15803d; }
+
+    .p3 .phase-number { background: #fef9c3; color: #854d0e; }
+    .p3 .criteria-tag { background: #fef9c3; color: #854d0e; }
+
+    .p4 .phase-number { background: #fce7f3; color: #9d174d; }
+    .p4 .criteria-tag { background: #fce7f3; color: #9d174d; }
+
+    .p5 .phase-number { background: #ede9fe; color: #5b21b6; }
+    .p5 .criteria-tag { background: #ede9fe; color: #5b21b6; }
+
+    .p6 .phase-number { background: #ffedd5; color: #9a3412; }
+    .p6 .criteria-tag { background: #ffedd5; color: #9a3412; }
+
+    /* DB schema box */
+    .schema-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+
+    .schema-box h4 { font-size: 0.8rem; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+    }
+
+    .db-table {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.78rem;
+    }
+
+    .db-table strong { display: block; margin-bottom: 4px; color: #3730a3; }
+    .db-table span { color: #555; line-height: 1.6; display: block; }
+
+    /* Success criteria summary */
+    .sc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .sc-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.83rem;
+      line-height: 1.5;
+    }
+
+    .sc-item .sc-num {
+      display: inline-block;
+      background: #e0e7ff;
+      color: #3730a3;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      margin-bottom: 4px;
+    }
+
+    footer {
+      max-width: 900px;
+      margin: 32px auto 0;
+      font-size: 0.8rem;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>CS IA – Boba Tea Shop POS</h1>
+  <p>Development plan &amp; breakdown by phase</p>
+  <div class="stack-badges">
+    <span class="badge">Python 3</span>
+    <span class="badge">Tkinter</span>
+    <span class="badge">SQLite</span>
+    <span class="badge">Desktop App</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Phase 1 -->
+  <div class="phase p1 done">
+    <div class="phase-header">
+      <div class="phase-number">1</div>
+      <div>
+        <div class="phase-title">Project Setup &amp; Database</div>
+        <div class="phase-subtitle">File structure, SQLite schema, seed data</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="phase-body">
+      <ul class="task-list">
+        <li>Create project folder structure (<code>main.py</code>, <code>db.py</code>, <code>views/</code>, <code>assets/</code>) <span class="criteria-tag">Setup</span></li>
+        <li>Initialise SQLite database and write <code>create_tables()</code> function <span class="criteria-tag">SC 6, 9</span></li>
+        <li>Implement <code>db.py</code> helper functions (connect, execute, fetchall) <span class="criteria-tag">Setup</span></li>
+        <li>Seed default Users table (manager + employee rows) <span class="criteria-tag">SC 9</span></li>
+      </ul>
+
+      <div class="schema-box">
+        <h4>Database Tables</h4>
+        <div class="table-grid">
+          <div class="db-table">
+            <strong>Users</strong>
+            <span>id · role · access_code</span>
+          </div>
+          <div class="db-table">
+            <strong>Items</strong>
+            <span>item_id · name · price</span>
+          </div>
+          <div class="db-table">
+            <strong>Subcategories</strong>
+            <span>sub_id · item_id · name · price</span>
+          </div>
+          <div class="db-table">
+            <strong>Orders</strong>
+            <span>order_id · date · price</span>
+          </div>
+          <div class="db-table">
+            <strong>Ordered_Items</strong>
+            <span>ordered_item_id · order_id · item_id</span>
+          </div>
+          <div class="db-table">
+            <strong>Ordered_Items_Sub</strong>
+            <span>ordered_item_id · sub_id (composite PK)</span>
+          </div>
+          <div class="db-table">
+            <strong>Ingredients</strong>
+            <span>ingr_id · name · current_stock · reorder_level</span>
+          </div>
+          <div class="db-table">
+            <strong>Items_Ingredients</strong>
+            <span>item_id · ingr_id · qty_used (composite PK)</span>
+          </div>
+          <div class="db-table">
+            <strong>Sub_Ingredients</strong>
+            <span>sub_id · ingr_id · qty_used (composite PK)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase p2 done">
+    <div class="phase-header">
+      <div class="phase-number">2</div>
+      <div>
+        <div class="phase-title">Authentication</div>
+        <div class="phase-subtitle">First-launch setup screen + dual-level login</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="phase-body">
+      <ul class="task-list">
+        <li>Detect first launch (check if access codes are empty in DB) <span class="criteria-tag">SC 10</span></li>
+        <li>Build setup screen — two input fields for manager &amp; staff codes, validate non-empty <span class="criteria-tag">SC 10</span></li>
+        <li>Hash and store access codes in the Users table <span class="criteria-tag">SC 9</span></li>
+        <li>Build login screen — single input, identify role from hashed code match <span class="criteria-tag">SC 9</span></li>
+        <li>Route to correct home screen based on role <span class="criteria-tag">SC 9</span></li>
+        <li>Show error message on wrong code entry <span class="criteria-tag">SC 9</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase p3 done">
+    <div class="phase-header">
+      <div class="phase-number">3</div>
+      <div>
+        <div class="phase-title">Order Processing Screen</div>
+        <div class="phase-subtitle">Item selection, subcategory choices, total calculation</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="phase-body">
+      <ul class="task-list">
+        <li>Display menu items as clickable buttons fetched from DB <span class="criteria-tag">SC 3</span></li>
+        <li>On item click, show subcategory panel (ice level, sugar, toppings) <span class="criteria-tag">SC 3</span></li>
+        <li>Implement search bar — filter items by name in real time <span class="criteria-tag">SC 4</span></li>
+        <li>Maintain an active order list with running total <span class="criteria-tag">SC 3</span></li>
+        <li>Confirm order: write to Orders + Ordered_Items + Ordered_Items_Sub tables <span class="criteria-tag">SC 3</span></li>
+        <li>Trigger inventory deduction on order confirm <span class="criteria-tag">SC 6</span></li>
+        <li>Trigger low-stock warning check after each order <span class="criteria-tag">SC 7</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase p4 done">
+    <div class="phase-header">
+      <div class="phase-number">4</div>
+      <div>
+        <div class="phase-title">Item Management Screen</div>
+        <div class="phase-subtitle">Manager-only CRUD for menu items</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="phase-body">
+      <ul class="task-list">
+        <li>List all items with name and price <span class="criteria-tag">SC 1</span></li>
+        <li>Add item form — name, price, then subcategory builder <span class="criteria-tag">SC 1, 2</span></li>
+        <li>Subcategory editor — add/remove options (ice level, sugar, toppings) with individual prices <span class="criteria-tag">SC 2</span></li>
+        <li>Ingredient cost panel — link ingredients and <code>qty_used</code> per item <span class="criteria-tag">SC 8</span></li>
+        <li>Edit existing item (name, price, subcategories, ingredient costs) <span class="criteria-tag">SC 1, 8</span></li>
+        <li>Delete item (cascade delete subcategories + ingredient links) <span class="criteria-tag">SC 1</span></li>
+        <li>Guard screen — accessible only when logged in as manager <span class="criteria-tag">SC 9</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase p5 done">
+    <div class="phase-header">
+      <div class="phase-number">5</div>
+      <div>
+        <div class="phase-title">Inventory Management Screen</div>
+        <div class="phase-subtitle">Real-time stock tracking, reorder warnings</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="phase-body">
+      <ul class="task-list">
+        <li>Display all ingredients with current stock, reorder level, and status column <span class="criteria-tag">SC 6</span></li>
+        <li>Manager can add new ingredient with initial stock and reorder level <span class="criteria-tag">SC 8</span></li>
+        <li>Manager can edit stock quantity and reorder level <span class="criteria-tag">SC 8</span></li>
+        <li>Auto-deduct ingredients when an order is confirmed (called from order flow) <span class="criteria-tag">SC 6</span></li>
+        <li>Colour-code rows: green = OK, red = below reorder level <span class="criteria-tag">SC 6</span></li>
+        <li>Persistent warning banner at top of screen when any ingredient is low <span class="criteria-tag">SC 7</span></li>
+        <li>Employee can view but not edit inventory <span class="criteria-tag">SC 9</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Phase 6 -->
+  <div class="phase p6 done">
+    <div class="phase-header">
+      <div class="phase-number">6</div>
+      <div>
+        <div class="phase-title">Business Reports Screen</div>
+        <div class="phase-subtitle">Manager-only analytics — revenue by item &amp; by day</div>
+      </div>
+      <span class="done-badge">Done</span>
+    </div>
+    <div class="phase-body">
+      <ul class="task-list">
+        <li>Query revenue and sale quantity grouped by item <span class="criteria-tag">SC 5</span></li>
+        <li>Query daily revenue for the last 30 days <span class="criteria-tag">SC 5</span></li>
+        <li>Display item revenue as a bar chart (matplotlib or tkinter canvas) <span class="criteria-tag">SC 5</span></li>
+        <li>Display daily revenue as a line/bar chart <span class="criteria-tag">SC 5</span></li>
+        <li>Tab layout — switch between "By Item" and "By Day" views <span class="criteria-tag">SC 5</span></li>
+        <li>Guard screen — accessible only when logged in as manager <span class="criteria-tag">SC 9</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Success Criteria Summary -->
+  <div class="phase" style="border-color:#e2e8f0;">
+    <div class="phase-header" style="background:#fafafa;">
+      <div class="phase-number" style="background:#e2e8f0;color:#555;">SC</div>
+      <div>
+        <div class="phase-title">Success Criteria Checklist</div>
+        <div class="phase-subtitle">All 10 criteria from the problem specification</div>
+      </div>
+    </div>
+    <div class="phase-body">
+      <div class="sc-grid">
+        <div class="sc-item"><span class="sc-num">SC 1</span> Add, edit and delete menu items</div>
+        <div class="sc-item"><span class="sc-num">SC 2</span> Subcategories per item (ice, sugar, toppings)</div>
+        <div class="sc-item"><span class="sc-num">SC 3</span> Process sales with subcategory selection and total display</div>
+        <div class="sc-item"><span class="sc-num">SC 4</span> Search items by name during checkout</div>
+        <div class="sc-item"><span class="sc-num">SC 5</span> View sale quantities and revenue by item and by day (last 30 days)</div>
+        <div class="sc-item"><span class="sc-num">SC 6</span> Real-time inventory deduction upon each sale</div>
+        <div class="sc-item"><span class="sc-num">SC 7</span> Warning displayed when stock drops below reorder level</div>
+        <div class="sc-item"><span class="sc-num">SC 8</span> Add and adjust ingredient quantities per item</div>
+        <div class="sc-item"><span class="sc-num">SC 9</span> Login screen with Manager and Employee access levels</div>
+        <div class="sc-item"><span class="sc-num">SC 10</span> One-time setup screen on first launch to set access codes</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>CS IA · Boba Tea POS · Python + Tkinter + SQLite</footer>
+
+</body>
+</html>

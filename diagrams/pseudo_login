@@ -1,0 +1,24 @@
+PROCEDURE verify_login(entered_code, selected_role):
+
+    IF entered_code is empty THEN
+        DISPLAY error message "Please enter an access code"
+    END IF
+
+    GET stored_code from USERS table where role = selected_role
+
+    IF entered_code = stored_code THEN
+        SET app.current_role = selected_role
+        IF selected_role = "manager" THEN
+            CALL show_frame(ManagerHomeScreen)
+        ELSE
+            CALL show_frame(EmployeeHomeScreen)
+        END IF
+    ELSE
+        DISPLAY error message "Incorrect access code"
+    END IF
+
+END PROCEDURE
+
+
+
+
